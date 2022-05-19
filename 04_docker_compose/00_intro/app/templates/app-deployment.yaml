@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name}}
+  namespace: {{ .Values.namespace}}
+  labels:
+   app: {{ .Values.app.name}}
+spec:
+  selector:
+    matchLabels:
+         app: {{ .Values.app.name}}
+  replicas: {{ .Values.replicas}}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name}}
+    spec: 
+      containers:
+      - name: {{ .Values.app.name}}
+        image: {{ .Values.app.image}}
+        env: 
+        - name: REDIS_HOST
+          value: $(redis_SERVICE_HOST)
+        ports: 
+          - containerPort: {{ .Values.app.port}}
+        livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 
+            initialDelaySeconds: 1
+            periodSeconds: 1
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: {{ .Values.app.port}}
+            initialDelaySeconds: 1
+            periodSeconds: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app.name}}
+  namespace: {{ .Values.namespace}}
+spec:
+  type: {{ .Values.app.type}}
+  selector:
+    app: {{ .Values.app.name}}
+  ports:
+   - protocol: {{ .Values.app.protocol}}
+     port: {{ .Values.app.port}}
+     targetPort: {{ .Values.app.port}}
+

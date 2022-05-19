@@ -1,0 +1,16 @@
+namespace: app-namespace
+replicas: 2
+app:
+  name: app
+  image: icesiops/midterm3app:0.1.0
+  port: 5000
+  type: LoadBalancer
+  protocol: TCP
+redis:
+  name: redis
+  strategy:
+    type: RollingUpdate
+  image: 'redis:alpine'
+  port: 6379
+  protocol: TCP
+ingressname: gateway-ingress
