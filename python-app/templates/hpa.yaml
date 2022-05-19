@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "python-app.fullname" . }}
+  labels:
+    {{- include "python-app.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "python-app.fullname" . }}
+  minReplicas: {{ .Values.replicas}}
+  maxReplicas: {{ .Values.replicas}}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 1
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: 1

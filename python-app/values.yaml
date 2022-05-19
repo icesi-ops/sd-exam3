@@ -1,0 +1,5 @@
+image: stigma137/app:0.1.5
+port: 8000
+servicetype: LoadBalancer
+replicas: 2
+name: app-py
