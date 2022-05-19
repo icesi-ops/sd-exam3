@@ -1,0 +1,12 @@
+image: icesiops/midterm3app:0.1.0
+port: 5000
+servicetype: ClusterIP
+replicas: 2
+name: midterm-app
+ingressname: gateway-ingress
+dbname: redis
+dbreplicas: 1
+dbcluster: dbmidterm-clusterip
+dbimage: redis:alpine
+dbprotocol: TCP
+dbport: 6379

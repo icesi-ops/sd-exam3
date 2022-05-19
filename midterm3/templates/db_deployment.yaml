@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.dbname}}
+  labels:
+    app: {{ .Values.dbname}}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.dbname}}
+  replicas: 1
+  strategy:
+    type: {{ .Values.dbstrategyType}}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.dbname}}
+    spec:
+      containers:
+        - name: {{ .Values.dbname}}
+          image: {{ .Values.dbimage}}
+          ports:
+            - containerPort: {{ .Values.dbport}}
+              protocol: {{ .Values.dbprotocol}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.dbcluster}}
+spec:
+  selector:
+    app: {{ .Values.dbname}}
+  ports:
+    - protocol: {{ .Values.dbprotocol}}
+      port: {{ .Values.dbport}}
+      targetPort: {{ .Values.dbport}}
